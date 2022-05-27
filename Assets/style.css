@@ -1,14 +1,67 @@
-* {
+ /* Added multiple CSS classes to fine tune some properties that I wasn't able to do with Bootstrap */
+ 
+ 
+ * {
     margin: 0;
     padding: 0;
     
 }
 
+/* Added customer background color */
 body {
-    background-color: #cdedf6
+    background-color: #cdedf6;
+
+    
 }
 
+/* Added custom color for header */
 header {
     background-color: #042a2b;
+} 
+
+/* Added custome color for the button */
+#select-city {
+    background-color: #d84727;
+    
 }
 
+#city-input {
+    margin-bottom: 10px;
+}
+
+#img {
+    height: 75px;
+    width: 75px;
+}
+
+.h4 {
+    padding-top: 10px
+} 
+
+#UVI {
+    padding-bottom: 25px
+} 
+    
+ 
+#nav {
+    float:left;
+    margin: 250px 0px 0px 75px;
+    border: 1px solid black;
+} 
+
+#currentW {
+    border: 1px solid black
+}
+
+#forecast {
+   
+    
+    clear: both;
+    margin: auto;
+    margin-top: 75px;
+    
+} 
+
+#five-day {
+    
+}
