@@ -4,9 +4,10 @@
 
 // search function for current city weather
 function search(city) {
-    var city= "Chicago"
+     
+    
     var searchURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=ae4ba04529c1b7a353e4492b8f77fbf4"
-    var forecastURL ="https://api.openweathermap.org/data/2.5/forecast?q=" + city +"&units=imperial&appid=ae4ba04529c1b7a353e4492b8f77fbf4"
+    
     var currentDate = moment().format("MMM Do, YYYY")
     
     fetch(searchURL)
@@ -71,48 +72,104 @@ function search(city) {
         }else {
             document.getElementById("UVI").style.background = "red"
         }
+        
+        //    Used same URL to get forecast infromation
+        // =================================================================
+        
+        function createDate() {
+            for (let i = 1; i < 6; i++) {
+                // Formatted date from data source
+                var dt = object.daily[i].dt
+                var day = new Date(dt*1000)
+                day = day.toDateString()
+                
+                //    Creates divs containing the content of the five day forecast
+                // =================================================================
+                
+                var fiveDayDiv = document.createElement("div")
+                fiveDayDiv.classList.add("card", "shadow-lg", "text-dark", "mx-auto", "p-2", "bg-light")
+                fiveDayDiv.style.maxWidth = "19%"
+                
+                //    Setting variables to the content of the JSON object from above
+                var forecastTemp = object.daily[i].temp.max
+                var forecastHumidity = object.daily[i].humidity
+                var forecastWind = object.daily[i].wind_speed
+                var iconSrc = object.daily[i].weather[0].icon
+                console.log(day)
+                console.log(forecastTemp)
+                console.log(forecastHumidity)
+                console.log(forecastWind)
+                
+                
+                
+                
+                
+               var dateEl = document.createElement("h4")
+               dateEl.classList.add("card-title")  
+               dateEl.textContent = day  
+               
+                        
+               
+               var tempEl = document.createElement("p")
+               tempEl.classList.add("card-content")
+               tempEl.innerHTML = "Temp: " + forecastTemp + " °F"
 
-    //    Used same URL to get forecast infromation
-    // =================================================================
+               
+               var humEl = document.createElement("p")
+               humEl.classList.add("card-content")
+               humEl.innerHTML = "Humidity: " + forecastHumidity + "%"
+               
+               var windEl = document.createElement("p")
+               windEl.classList.add("card-content")
+               windEl.innerHTML = "Wind: " + forecastWind + " MPH"
+               
+               var icon = document.createElement("img")
+               icon.src = "https://api.openweathermap.org/img/w/" + iconSrc +".png"
+               icon.style.height = ("40px")
+               icon.style.width = ("40px") 
+               console.log(tempEl)
 
-        function createDate(dt) {
-           for (let i = 1; i < 6; i++) {
-            // Formatted date from data source
-               var dt = object.daily[i].dt
-               var day = new Date(dt*1000)
-               day = day.toDateString()
-               var forecastTemp = object.daily[i].temp.max
-               var forecastHumidity = object.daily[i].humidity
-               var forecastWind = object.daily[i].wind_speed
-               var icon = object.daily[i].weather[0].icon
-               console.log(day)
-               console.log(forecastTemp)
-               console.log(forecastHumidity)
-               console.log(forecastWind)
-               var dateEl = document.createElement("h4").innerHTML = day
-               var tempEl = document.createElement("p").innerHTML = forecastTemp
-               var humEl = document.createElement("p").innerHTML = forecastHumidity
-               var windEl = document.createElement("p").innerHTML = forecastWind
-               var icon = document.createElement("img").src = "https://api.openweathermap.org/img/w/" + icon +".png"
-
-               var fivedaydiv = document.getElementById("five-day")
-               fivedaydiv.append(dateEl)
-               fivedaydiv.append(icon)
-               fivedaydiv.append(tempEl)
-               fivedaydiv.append(humEl)
-               fivedaydiv.append(windEl)
+               
+               
+               // Append items
+               fiveDayDiv.append(dateEl)
+               fiveDayDiv.append(tempEl)
+               fiveDayDiv.append(humEl)
+               fiveDayDiv.append(windEl)
+               fiveDayDiv.append(icon)
+               document.getElementById("five-day").append(fiveDayDiv)
             }
-            
+                        
         }
         createDate()
     })
-                
+})
+}
+// search()
 
+// Event handler for city search
+// =================================
+document.getElementById("select-city").onclick = function search(event) {
+    
+    // prevent default for the button
+    // ====================
+    event.preventDefault();
+    
+    // store the city name
+    // ====================
+    var searchEl = document.getElementById("city-input")
+
+    // save search to local storage
+    // ====================
+    localStorage.setItem("city-input", JSON.stringify(searchEl.value))
+
+   
+} 
 
                
 
 
-    // Make call for 5 day forecast
+ 
  
 
       
@@ -125,27 +182,16 @@ function search(city) {
 
 
 
-})
 
  
    
     
-}
-search()
 
 
    
 
-    // store an array of responseults
-    // create the div
-    // store the responses date temp and humidity
-    // create tags with the responseult item infromation
-    // Append items
+   
 
-// Event handler for city search
-    // prevent default for the button
-    // store the city name
-    // save search to local storage
     
 
 // Call stored items on page load
