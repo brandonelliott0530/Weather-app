@@ -3,8 +3,9 @@
 
 
 // search function for current city weather
-function search(city) {
-     
+function searchCity(city) {
+    
+    
     
     var searchURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=ae4ba04529c1b7a353e4492b8f77fbf4"
     
@@ -15,7 +16,7 @@ function search(city) {
         return response.json()
     })
     .then(function (object) {
-        // console.log(object)
+        
         
         
         
@@ -56,7 +57,7 @@ function search(city) {
         return response.json()
     })
     .then(function (object) {
-        console.log(object)
+        
         var uvi = object.current.uvi
         document.getElementById("UVI").innerHTML = "UV Index: " + uvi
         
@@ -85,7 +86,6 @@ function search(city) {
                 
                 //    Creates divs containing the content of the five day forecast
                 // =================================================================
-                
                 var fiveDayDiv = document.createElement("div")
                 fiveDayDiv.classList.add("card", "shadow-lg", "text-dark", "mx-auto", "p-2", "bg-light")
                 fiveDayDiv.style.maxWidth = "19%"
@@ -95,61 +95,67 @@ function search(city) {
                 var forecastHumidity = object.daily[i].humidity
                 var forecastWind = object.daily[i].wind_speed
                 var iconSrc = object.daily[i].weather[0].icon
-                console.log(day)
-                console.log(forecastTemp)
-                console.log(forecastHumidity)
-                console.log(forecastWind)
+               
                 
                 
                 
                 
                 
-               var dateEl = document.createElement("h4")
-               dateEl.classList.add("card-title")  
-               dateEl.textContent = day  
-               
-                        
-               
-               var tempEl = document.createElement("p")
-               tempEl.classList.add("card-content")
-               tempEl.innerHTML = "Temp: " + forecastTemp + " °F"
-
-               
-               var humEl = document.createElement("p")
-               humEl.classList.add("card-content")
-               humEl.innerHTML = "Humidity: " + forecastHumidity + "%"
-               
-               var windEl = document.createElement("p")
-               windEl.classList.add("card-content")
-               windEl.innerHTML = "Wind: " + forecastWind + " MPH"
-               
-               var icon = document.createElement("img")
-               icon.src = "https://api.openweathermap.org/img/w/" + iconSrc +".png"
-               icon.style.height = ("40px")
-               icon.style.width = ("40px") 
-               console.log(tempEl)
-
-               
-               
-               // Append items
-               fiveDayDiv.append(dateEl)
-               fiveDayDiv.append(tempEl)
-               fiveDayDiv.append(humEl)
-               fiveDayDiv.append(windEl)
-               fiveDayDiv.append(icon)
-               document.getElementById("five-day").append(fiveDayDiv)
+                var dateEl = document.createElement("h4")
+                dateEl.classList.add("card-title")  
+                dateEl.textContent = day  
+                
+                
+                
+                var tempEl = document.createElement("p")
+                tempEl.classList.add("card-content")
+                tempEl.innerHTML = "Temp: " + forecastTemp + " °F"
+                
+                
+                var humEl = document.createElement("p")
+                humEl.classList.add("card-content")
+                humEl.innerHTML = "Humidity: " + forecastHumidity + "%"
+                
+                var windEl = document.createElement("p")
+                windEl.classList.add("card-content")
+                windEl.innerHTML = "Wind: " + forecastWind + " MPH"
+                
+                var icon = document.createElement("img")
+                icon.src = "https://api.openweathermap.org/img/w/" + iconSrc +".png"
+                icon.style.height = ("40px")
+                icon.style.width = ("40px") 
+                
+                
+                
+                
+                // Append items
+                fiveDayDiv.append(dateEl)
+                fiveDayDiv.append(tempEl)
+                fiveDayDiv.append(humEl)
+                fiveDayDiv.append(windEl)
+                fiveDayDiv.append(icon)
+                document.getElementById("five-day").append(fiveDayDiv)
             }
-                        
+            
         }
         createDate()
     })
 })
 }
-// search()
+
+pageLoad()
+
+// Function to clear div for five-day
+// ====================
+function clear() {
+    document.getElementById("five-day").innerHTML = ""
+}
+
 
 // Event handler for city search
 // =================================
 document.getElementById("select-city").onclick = function search(event) {
+    
     
     // prevent default for the button
     // ====================
@@ -157,14 +163,60 @@ document.getElementById("select-city").onclick = function search(event) {
     
     // store the city name
     // ====================
-    var searchEl = document.getElementById("city-input")
-
+    var city = document.getElementById("city-input").value
+    
     // save search to local storage
     // ====================
-    localStorage.setItem("city-input", JSON.stringify(searchEl.value))
+    var textContent = document.getElementById("city-input").value
+    var storeArr = []
+    storeArr.push(textContent)
+    localStorage.setItem("city-input", JSON.stringify(storeArr))
+    
+    
+    searchCity(city)
+    clear()
+    
+}
+ 
 
+// Creates buttons from the search history
+// =================================
+function pageLoad() {
+    var lastSearch = JSON.parse(localStorage.getItem("city-input"))
+    var searchDiv = document.createElement("button")
+    searchDiv.classList.add("btn")
+    searchDiv.classList.add("text-white")
+    searchDiv.classList.add("mt-1")
+    searchDiv.classList.add("rounded")
+    searchDiv.classList.add("btn-secondary")
+    searchDiv.classList.add("btn-lg")
+    searchDiv.textContent = lastSearch
+    
+    
+    
+    var previousSearch = document.createElement("div")
+    previousSearch.append(searchDiv)
+
+    document.getElementById("search-history").prepend(previousSearch)
+    
+}
+
+//  Created a function to search for a city by the search history buttons
+// ================================================================
+document.getElementById("search-history").onclick = function history(event) {
+    event.preventDefault()
+    var city = document.getElementById("search-history").textContent.trim()
+    console.log(city)
+    clear()
+    searchCity(city)
+}
+    
+    
+  
    
-} 
+
+
+
 
                
 
